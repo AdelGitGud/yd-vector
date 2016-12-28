@@ -48,6 +48,7 @@ public:
 	// Copy constructor
 	Vector<T>(const Vector<T>& vec);
 	Vector<T>(std::initializer_list<T> list);
+	Vector<T>(size_t vecSize);
 	~Vector<T>();
 	// Copy operator =
 	Vector<T>& operator=(const Vector<T>& vec);
@@ -96,7 +97,6 @@ public:
 	bool removeDuplicates();
 	// Gets a smaller vector from inside the vector
 	Vector<T> subVector(const T* begin, size_t vecSize) const;
-
 	// Max value: 1. idx, 2. value ptr
 	const Pair<size_t, const T*> max() const;
 	Pair<size_t, T*> max();
@@ -660,6 +660,13 @@ inline Vector<T>::Vector(std::initializer_list<T> list){
 
 	size_ = list.size();
 	capacity_ = list.size();
+}
+
+template<typename T>
+inline Vector<T>::Vector(size_t vecSize){
+	initMemory(vecSize);
+	size_ = 0;
+	capacity_ = vecSize;
 }
 
 template<typename T>
