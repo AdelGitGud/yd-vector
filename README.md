@@ -1,2 +1,2 @@
 # yd-vector
-A vector with of useless extra functionalities.
+A vector with useless extra functionalities.
