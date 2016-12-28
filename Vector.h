@@ -67,6 +67,8 @@ public:
 	// moves all the elements after the removed element
 	// so that there are no discontinuities inside the vector
 	void erase(T* start, T* end = 0);
+
+	T* insert(T* pos, const T& value);
 	// Erase last element, if empty, do nothing, return false
 	bool pop_back();
 	// Access elements with []. Const + non-const
@@ -88,6 +90,8 @@ public:
 	T* find(const T& targetExample);
 	// Const version
 	const T* find(const T& targetExample) const;
+
+
 	// We want to compare two vectors
 	bool operator==(const Vector<T>& otherVec) const;
 	// Empty the vector
@@ -163,7 +167,30 @@ private:
 };
 
 template<typename T>
-T& yd::Vector<T>::back(){
+T* Vector<T>::insert(T* pos, const T& value){
+#ifdef CHECK_OUT_OF_RANGE_ERR
+	if (!(pos >= beginPtr && pos < beginPtr + size_)) {
+		VECOUTOFRANGE();
+	}
+#endif
+	if (size_ == capacity_) {
+		reserve(capacity_ + ALLOC_LEAP(capacity_));
+	}
+	T* iterPtr = beginPtr + size_;
+	new (iterPtr) T(*(beginPtr + size_ - 1));
+	iterPtr--;
+
+	while (iterPtr > pos) {
+		*iterPtr = *(iterPtr - 1);
+		iterPtr--;
+	}
+	*pos = value;
+	size_++;
+	return pos;
+}
+
+template<typename T>
+T& Vector<T>::back(){
 	return *(beginPtr + size_ - 1):
 }
 
