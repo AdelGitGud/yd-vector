@@ -125,6 +125,12 @@ public:
 	// no more size - 1
 	T& last();
 	const T& last() const;
+	// but actually it is back in std::vector
+	T& back();
+	const T& back() const;
+
+	//yup
+	typedef size_t size_type;
 
 	// does this contain all the elements of the
 	// referenced vector?
@@ -155,6 +161,17 @@ private:
 	// Reserved memory
 	size_t capacity_;
 };
+
+template<typename T>
+T& yd::Vector<T>::back(){
+	return *(beginPtr + size_ - 1):
+}
+
+template<typename T>
+const T& Vector<T>::back() const {
+	return *(beginPtr + size_ - 1);
+}
+
 
 template<typename T>
 bool Vector<T>::matchAll(const Vector<T>& refVec) const{
