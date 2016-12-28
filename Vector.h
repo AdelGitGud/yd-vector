@@ -47,6 +47,7 @@ public:
 	Vector(T2(&arr)[SIZE]);
 	// Copy constructor
 	Vector<T>(const Vector<T>& vec);
+	Vector<T>(std::initializer_list<T> list);
 	~Vector<T>();
 	// Copy operator =
 	Vector<T>& operator=(const Vector<T>& vec);
@@ -649,6 +650,16 @@ inline Vector<T>::Vector(const Vector<T>& vec) {
 
 	size_ = vec.size();
 	capacity_ = vec.capacity_;
+}
+
+template<typename T>
+inline Vector<T>::Vector(std::initializer_list<T> list){
+	size_t mallocSize = (list.size());
+	initMemory(mallocSize);
+	uninitializedCopy(list.begin(), list.end());
+
+	size_ = list.size();
+	capacity_ = list.size();
 }
 
 template<typename T>
