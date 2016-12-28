@@ -709,7 +709,7 @@ inline Vector<T>::Vector(std::initializer_list<T> list){
 template<typename T>
 inline Vector<T>::Vector(size_t vecSize){
 	initMemory(vecSize);
-	size_ = 0;
+	resize(vecSize);
 	capacity_ = vecSize;
 }
 
