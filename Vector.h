@@ -191,7 +191,7 @@ T* Vector<T>::insert(T* pos, const T& value){
 
 template<typename T>
 T& Vector<T>::back(){
-	return *(beginPtr + size_ - 1):
+	return *(beginPtr + size_ - 1);
 }
 
 template<typename T>
