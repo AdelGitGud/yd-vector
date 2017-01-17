@@ -66,7 +66,7 @@ public:
 	// erases members between start and end, if end is null then erase start
 	// moves all the elements after the removed element
 	// so that there are no discontinuities inside the vector
-	void erase(T* start, T* end = 0);
+	T* erase(T* start, T* end = 0);
 
 	T* insert(T* pos, const T& value);
 	// Erase last element, if empty, do nothing, return false
@@ -538,7 +538,7 @@ bool Vector<T>::removeDuplicates() {
 }
 
 template<typename T>
-void Vector<T>::erase(T* start, T* end /*= 0*/) {
+T* Vector<T>::erase(T* start, T* end /*= 0*/) {
 	// We erase end - start elements, except if end not specified
 	size_t eraseCount = end ? end - start : 1;
 
@@ -560,7 +560,9 @@ void Vector<T>::erase(T* start, T* end /*= 0*/) {
 			iterPointer++;
 		}
 		size_ = size_ - eraseCount;
+		return start + 1;
 	}
+	return start;
 }
 
 template<typename T>
