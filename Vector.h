@@ -454,6 +454,7 @@ template<typename T>
 T* Vector<T>::reallocation(T *data, const size_t size, const size_t oldSize) {
 	T* newData = static_cast<T*>(::operator new(sizeof(T) * size));
 	uninitializedCopy(data, data + oldSize, newData);
+    freeMemory();
 	return newData;
 }
 
