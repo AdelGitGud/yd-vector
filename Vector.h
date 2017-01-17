@@ -158,6 +158,10 @@ private:
 	// Calls destructors between these two points
 	// Doesn't call free(), though
 	void destroyBetween(T* first, T* last);
+    // Reallocate because realloc and new arent supposed to mix
+	// On some compilers using realloc is fine, on some no
+	// So we use this instead (could maybe be improved, but its close to 2am)
+	T* reallocation(T* data, const size_t size, const size_t oldSize);
 	// All the data
 	T* beginPtr;
 	// Actual contents size
@@ -437,12 +441,20 @@ void Vector<T>::uninitializedCopy(const T *first, const T *last, T* begin) {
 		// Might want to throw here.
 	}
 }
+
 template<typename T>
 void Vector<T>::destroyBetween(T *first, T *last) {
 	while (first != last) {
 		first->~T();
 		first++;
 	}
+}
+
+template<typename T>
+T* Vector<T>::reallocation(T *data, const size_t size, const size_t oldSize) {
+	T* newData = static_cast<T*>(::operator new(sizeof(T) * size));
+	uninitializedCopy(data, data + oldSize, newData);
+	return newData;
 }
 
 template<typename T>
@@ -581,12 +593,12 @@ void Vector<T>::reserve(size_t newSize) {
 			destroyBetween(beginPtr + newSize, beginPtr + oldSize);
 		}
 
-		void* tempBuffer = realloc(beginPtr, sizeof(T)*(newSize));
+		T* tempBuffer = reallocation(beginPtr, sizeof(T)*(newSize), oldSize);
 		if (tempBuffer == NULL) {
 			// This could also throw an error.
 			return;
 		}
-		beginPtr = (T*)tempBuffer;
+		beginPtr = tempBuffer;
 
 		capacity_ = newSize;
 		if (oldSize > newSize) {
@@ -728,12 +740,12 @@ void Vector<T>::push_back(const T& newItem) {
 		// add allocLeap number of mem slots to the beginPtr
 		size_t oldSize = size_;
 		size_t newSize = oldSize + ALLOC_LEAP(oldSize);
-		void* tempBuffer = realloc(beginPtr, sizeof(T)*(newSize));
+		T* tempBuffer = reallocation(beginPtr, sizeof(T)*(newSize), oldSize);
 		if (tempBuffer == NULL) {
 			// This could also throw an error.
 			return;
 		}
-		beginPtr = (T*)tempBuffer;
+		beginPtr = tempBuffer;
 		capacity_ = newSize;
 
 		size_++;
